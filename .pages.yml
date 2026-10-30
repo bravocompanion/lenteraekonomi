@@ -1,0 +1,65 @@
+media:
+  input: public/media
+  output: /media
+  rename: safe
+  categories: [image]
+
+content:
+  - name: articles
+    label: Artikel Ekonomi
+    type: collection
+    path: content/articles
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [title, category, date, published, featured]
+      primary: title
+      sort: [date, title]
+      search: [title, description, category]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Judul artikel
+        type: string
+        required: true
+      - name: description
+        label: Ringkasan artikel
+        type: text
+        required: true
+      - name: category
+        label: Kategori
+        type: select
+        required: true
+        options:
+          values:
+            - name: Dasar Ekonomi
+              label: Dasar Ekonomi
+            - name: Keuangan Pribadi
+              label: Keuangan Pribadi
+            - name: Bisnis & UMKM
+              label: Bisnis & UMKM
+            - name: Ekonomi Indonesia
+              label: Ekonomi Indonesia
+      - name: date
+        label: Tanggal publikasi
+        type: date
+        required: true
+      - name: author
+        label: Penulis
+        type: string
+        required: true
+      - name: cover
+        label: Gambar sampul (opsional)
+        type: image
+      - name: published
+        label: Publikasikan
+        type: boolean
+      - name: featured
+        label: Artikel unggulan
+        type: boolean
+      - name: body
+        label: Isi artikel
+        type: rich-text
+        required: true
