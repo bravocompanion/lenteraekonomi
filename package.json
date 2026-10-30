@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node --check scripts/build.mjs && node --check public/assets/app.js"
+    "check": "node --check scripts/build.mjs && node --check public/assets/app.js",
+    "deploy": "npm run build && npx wrangler deploy",
+    "preview": "npm run build && npx wrangler dev"
   },
   "engines": {
     "node": ">=20"

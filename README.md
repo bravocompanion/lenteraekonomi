@@ -70,3 +70,10 @@ Konfigurasi wrangler.jsonc menunjuk assets.directory ke ./dist dan mengatur 404 
 Jika menggunakan Cloudflare Pages, gunakan Build command npm run build, Build output directory dist dan Framework preset None. Jangan gunakan folder public sebagai output; folder public adalah sumber aset sebelum build.
 
 Apabila nama Worker di dashboard bukan lenteraekonomi, ubah name dalam wrangler.jsonc agar sama. Setelah memperbarui pengaturan Cloudflare, ulangi build (Retry build atau push commit baru).
+
+
+### Built assets included for Workers Git deploy
+
+The `dist/` directory is now included in Git as a verified initial static asset snapshot so `wrangler deploy` can find it even if Cloudflare's optional Build command was left empty. **For every article/CMS update, the recommended Workers Deploy command is `npm run deploy`, which rebuilds dist from source before publishing**, regardless of the Build command setting. Set Root directory to `/` and Worker name to `lenteraekonomi`. If Cloudflare Workers Build command already says `npm run build`, `npx wrangler deploy` also works, but `npm run deploy` makes the dependency explicit. The checked-in `dist/` serves as a fallback; it is not the source of truth.
+
+If you use Cloudflare Pages rather than Workers, set build command `npm run build` and output directory `dist`.
