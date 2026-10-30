@@ -51,3 +51,22 @@ Alamat /admin/ di situs adalah halaman pengantar ke CMS. Login CMS dikelola oleh
 ## Keamanan dan publikasi
 
 Hanya akun dengan izin yang sesuai pada GitHub repository yang dapat mengubah konten. Jangan menyimpan informasi pribadi, password, atau API token di repository publik. Konten adalah edukasi umum, bukan rekomendasi investasi atau nasihat profesional individual.
+
+
+## Troubleshooting Cloudflare: static files tidak terdeteksi
+
+Sumber situs menghasilkan HTML dalam folder dist melalui npm run build. Folder dist tidak disimpan di Git: Cloudflare harus menjalankan build sebelum deploy.
+
+Jika menggunakan Cloudflare Workers (bukan Pages):
+
+- Worker project name: lenteraekonomi. Nama harus sama dengan properti name dalam wrangler.jsonc.
+- Git branch: main
+- Root directory: / (repository root)
+- Build command: npm run build
+- Deploy command: npx wrangler deploy
+
+Konfigurasi wrangler.jsonc menunjuk assets.directory ke ./dist dan mengatur 404 statis.
+
+Jika menggunakan Cloudflare Pages, gunakan Build command npm run build, Build output directory dist dan Framework preset None. Jangan gunakan folder public sebagai output; folder public adalah sumber aset sebelum build.
+
+Apabila nama Worker di dashboard bukan lenteraekonomi, ubah name dalam wrangler.jsonc agar sama. Setelah memperbarui pengaturan Cloudflare, ulangi build (Retry build atau push commit baru).
