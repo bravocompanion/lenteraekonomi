@@ -70,7 +70,7 @@ function shell(title,description,body,url,article=false,metadata='',socialImage=
  const chosenImage = socialImage && /^(https?:\/\/|\/media\/)/i.test(socialImage) ? socialImage : '/media/open-graph-lentera-ekonomi.jpg';
  const imageUrl = chosenImage.startsWith('/') ? BASE + chosenImage : chosenImage;
  const webpSocial = /\.webp(?:\?.*)?$/i.test(chosenImage);
- const nav='<a href="/">Beranda</a><a href="/artikel/">Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a><a class="nav-cta" href="/artikel/">Mulai Belajar ↗</a>';
+ const nav='<a href="/">Beranda</a><a href="/artikel/">Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a><a class="nav-cta" href="/artikel/">Mulai Belajar ↗</a><a class="nav-editor-link" href="/admin/" aria-label="Masuk CMS Lentera Ekonomi">Editor</a>';
  return '<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
  '<meta name="theme-color" content="#215b46"><meta name="description" content="'+esc(description)+'"><link rel="canonical" href="'+BASE+url+'">'+
  '<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><meta property="og:site_name" content="Lentera Ekonomi">'+
@@ -196,8 +196,13 @@ function editor(){
  '<header class="cms-editor-top"><div><p class="cms-eyebrow">LENTERA EKONOMI / CONTENT MANAGEMENT</p><h1>Ruang Editor</h1><p>Kelola artikel yang disimpan langsung ke repository GitHub.</p></div><button type="button" class="cms-action secondary" data-logout>Keluar ↗</button></header>'+
  '<div class="cms-editor-grid"><aside class="cms-sidebar"><h2>Daftar artikel</h2><div class="cms-sidebar-actions"><button type="button" class="cms-action" data-new-article>+ Buat artikel</button>'+
  '<input class="cms-search" data-article-search type="search" aria-label="Cari artikel" placeholder="Cari judul atau kategori..."></div>'+
+ '<div class="cms-integration-box"><div class="cms-integration-eyebrow">INTEGRASI LANGSUNG</div>'+
+ '<div class="cms-integration-state" data-integration-state role="status">Memeriksa koneksi GitHub...</div>'+
+ '<p class="cms-integration-detail" data-integration-detail>Artikel terhubung ke repository GitHub Lentera Ekonomi.</p>'+
+ '<button type="button" class="cms-recheck" data-check-integration>↻ Periksa koneksi</button></div>'+
  '<div class="cms-count" data-article-count>Memuat artikel...</div><div class="cms-article-list" data-article-list></div></aside>'+
  '<section class="cms-editor-panel"><h2 data-editor-heading>Artikel baru</h2>'+
+ '<div class="cms-save-result" data-save-result hidden></div>'+
  '<div data-cms-status class="cms-status" role="status" aria-live="polite" hidden></div>'+
  '<form data-cms-form><div class="cms-field"><label for="e-title">Judul artikel</label><input id="e-title" name="title" maxlength="160" required placeholder="Tuliskan judul yang informatif"></div>'+
  '<div class="cms-field"><label for="e-slug">Alamat URL (slug)</label><input id="e-slug" name="slug" maxlength="100" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="judul-artikel"></div>'+
@@ -216,7 +221,10 @@ function editor(){
  '<small>Gunakan ## untuk subjudul, **teks** untuk tebal, - untuk daftar, dan [teks](tautan) untuk link.</small></div>'+
  '<div class="cms-form-bottom"><button class="cms-action danger" type="button" data-delete hidden>Hapus artikel</button>'+
  '<div><a class="cms-action secondary" href="/artikel/" target="_blank" rel="noopener noreferrer">Lihat website ↗</a>'+
- '<button class="cms-action" type="submit" data-save>Simpan ke GitHub ✓</button></div></div></form></section></div></div></div>';
+ '<button class="cms-action secondary" type="button" data-preview-toggle>Pratinjau naskah</button>'+
+ '<button class="cms-action" type="submit" data-save>Simpan ke GitHub ✓</button></div></div></form>'+
+ '<section class="cms-preview-pane" data-preview-pane hidden><div class="cms-preview-label">PRATINJAU LOKAL — BUKAN HALAMAN PUBLIK</div>'+
+ '<div data-preview-body class="cms-preview-body"></div></section></section></div></div></div>';
  return shell('CMS Editor','Kelola artikel Lentera Ekonomi melalui ruang editor pribadi.',body,'/admin/editor/');
 }
 if(fs.existsSync(OUT))fs.rmSync(OUT,{recursive:true,force:true});

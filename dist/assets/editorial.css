@@ -308,3 +308,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d49e
 .related-grid .cover-art .cover-category-icon{max-height:130px}
 @media(max-width:760px){.site-header .brand .brand-logo{width:205px}.site-footer .brand .brand-logo{width:222px}.editor-pick .cover-art .cover-category-icon{height:90%;max-height:170px;width:52%}}
 @media(max-width:440px){.site-header .brand .brand-logo{width:188px}.topic-card .topic-icon{width:56px;height:56px}.article-cover .cover-art .cover-category-icon{width:58%}}
+
+/* Discreet direct CMS entry */
+.nav-links .nav-editor-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #d8e4d8;border-radius:8px;padding:9px 12px;font-weight:700;font-size:11px;color:#2a6444;background:#f2f7f0}
+.nav-links .nav-editor-link:hover{background:#e3f0e1;color:#1c4b32}
+@media(max-width:760px){.nav-links .nav-editor-link{justify-content:flex-start;padding:11px 13px}}

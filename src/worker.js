@@ -91,7 +91,7 @@ async function github(env,method,path,body) {
   const r=await fetch(url,{method,headers:cleanHeaders({token:env.GITHUB_TOKEN}),body:body?JSON.stringify(body):undefined});
   let data=null;try {data=await r.json()}catch{}
   if(!r.ok) {
-    const safe=r.status===409?'File telah berubah. Muat ulang sebelum menyimpan.':
+    const safe=r.status===409||r.status===422?'File telah berubah atau permintaan ditolak. Muat ulang sebelum menyimpan.':
       r.status===401||r.status===403?'Akses GitHub gagal. Periksa token dan izin Contents.':
       r.status===404?'Artikel atau repository tidak ditemukan.':
       'GitHub gagal memproses permintaan (HTTP '+r.status+').';
@@ -144,19 +144,40 @@ function validate(a) {
     throw Error('Gambar sampul harus berasal dari media website.');
   return {slug:a.slug,title,description,category,author,date,cover,body,published:a.published===true,featured:a.featured===true};
 }
-function safeError(error){return jsonError(error.message||'Terjadi kesalahan.',error.status===409?409:error.status===404?404:400)}
+function safeError(error){
+  const allowed=[400,401,403,404,409,413,422,429,500,503];
+  const status=allowed.includes(error.status)?error.status:400;
+  return jsonError(error.message||'Terjadi kesalahan.',status);
+}
 async function listArticles(env){
   const list=await github(env,'GET','content/articles');
   if(!Array.isArray(list))throw Error('Direktori artikel tidak ditemukan.');
-  const items=await Promise.all(list.filter(x=>x.type==='file'&&x.name.endsWith('.md')).slice(0,150).map(async file=>{
-    try {
-      const data=await github(env,'GET',articlePath(file.name.slice(0,-3)));
+  const files=list.filter(x=>x.type==='file'&&x.name.endsWith('.md')).slice(0,150);
+  const items=[];
+  // Use small concurrent batches to avoid hitting GitHub secondary rate limits.
+  // A failed request should be visible to the editor, never silently dropped.
+  for(let i=0;i<files.length;i+=6){
+    const batch=await Promise.all(files.slice(i,i+6).map(async file=>{
+      const slug=file.name.slice(0,-3);
+      const data=await github(env,'GET',articlePath(slug));
       const parsed=parseArticle(decodeUtf(data.content));
       delete parsed.body;
-      return {...parsed,slug:file.name.slice(0,-3),sha:data.sha};
-    } catch {return null}
-  }));
-  return items.filter(Boolean).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+      return {...parsed,slug,sha:data.sha};
+    }));
+    items.push(...batch);
+  }
+  return items.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+}
+async function integrationStatus(env){
+  // GitHub API call checks the actual configured token and repository permissions.
+  const list=await github(env,'GET','content/articles');
+  if(!Array.isArray(list))throw Error('Akses direktori artikel GitHub tidak tersedia.');
+  return {
+    ok:true, connected:true, repository:REPO, branch:BRANCH,
+    articles:list.filter(file=>file.type==='file'&&file.name.endsWith('.md')).length,
+    deployment:'Perubahan commit tersimpan di GitHub; status live bergantung pada deploy Cloudflare.',
+    checkedAt:new Date().toISOString()
+  };
 }
 async function saveArticle(env,payload){
   const a=validate(payload),path=articlePath(a.slug),sha=fieldString(payload.sha||'',80);
@@ -167,14 +188,14 @@ async function saveArticle(env,payload){
   const body={message:(current?'cms: update ':'cms: create ')+a.slug,content:utfBase64(articleText(a)),branch:BRANCH};
   if(current)body.sha=current.sha;
   const result=await github(env,'PUT',path,body);
-  return {ok:true,sha:result.content?.sha,slug:a.slug};
+  return {ok:true,sha:result.content?.sha,commitSha:result.commit?.sha,slug:a.slug,published:a.published,needsDeploy:true};
 }
 async function deleteArticle(env,slug,sha){
   if(!slugOk(slug)||!/^[a-f0-9]{40}$/.test(sha||''))throw Error('Permintaan penghapusan tidak valid.');
   const current=await github(env,'GET',articlePath(slug));
   if(current.sha!==sha){const e=new Error('Artikel telah berubah. Muat ulang sebelum menghapus.');e.status=409;throw e}
-  await github(env,'DELETE',articlePath(slug),{message:'cms: delete '+slug,sha,branch:BRANCH});
-  return {ok:true};
+  const result=await github(env,'DELETE',articlePath(slug),{message:'cms: delete '+slug,sha,branch:BRANCH});
+  return {ok:true,commitSha:result.commit?.sha,needsDeploy:true};
 }
 async function uploadMedia(env,data) {
   if(!data||typeof data.data!=='string'||data.data.length>2100000)throw Error('Gambar maksimal 1,5 MB.');
@@ -226,6 +247,7 @@ async function api(request,env){
   if(pathname==='/api/admin/logout'&&method==='POST')return response({ok:true},200,{'Set-Cookie':sessionCookie('',0)});
   if(!env.GITHUB_TOKEN)return jsonError('Token GitHub belum diatur.',503);
   try{
+    if(pathname==='/api/admin/integration'&&method==='GET')return response(await integrationStatus(env));
     if(pathname==='/api/admin/articles'&&method==='GET')return response({ok:true,articles:await listArticles(env)});
     if(pathname==='/api/admin/articles'&&method==='POST')return response(await saveArticle(env,await readJson(request)),200);
     const item=pathname.match(/^\/api\/admin\/articles\/([a-z0-9-]+)$/);

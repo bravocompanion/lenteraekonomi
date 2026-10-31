@@ -1,10 +1,11 @@
 # Lentera Ekonomi
 
-Portal edukasi ekonomi Indonesia dengan desain editorial responsif, artikel Markdown, kategori, pencarian, SEO, sitemap, RSS, dan Pages CMS.
+Portal edukasi ekonomi Indonesia dengan desain editorial responsif, artikel Markdown, kategori, pencarian, SEO, sitemap, RSS, dan CMS internal berbasis Cloudflare Workers + GitHub.
 
 - Repository: https://github.com/bravocompanion/lenteraekonomi
 - Target domain: https://lenteraekonomi.my.id
-- CMS: https://app.pagescms.org
+- CMS internal: https://lenteraekonomi.my.id/admin/ (login) dan /admin/editor/ (editor langsung)
+- Pages CMS eksternal hanya opsi cadangan, tidak diperlukan untuk editor internal.
 
 ## Struktur
 
@@ -12,7 +13,7 @@ Portal edukasi ekonomi Indonesia dengan desain editorial responsif, artikel Mark
 - .pages.yml : konfigurasi CMS visual.
 - scripts/build.mjs : generator HTML static tanpa dependensi eksternal.
 - public/ : CSS, JavaScript, favicon, dan unggahan media.
-- dist/ : hasil build, tidak ikut GitHub.
+- dist/ : hasil build yang juga disimpan dalam GitHub untuk kemudahan deploy; selalu diperbarui oleh `npm run build`.
 
 ## Menjalankan
 
@@ -20,7 +21,7 @@ Gunakan Node.js versi 20 atau lebih tinggi dan jalankan: npm run build
 
 Sajikan folder dist/ dengan server statis. Halaman menggunakan link root sehingga preview sebaiknya melalui localhost, bukan membuka file secara langsung.
 
-## Deploy ke Cloudflare Pages
+## Deployment lama: Cloudflare Pages (statis; **tidak mendukung login CMS internal**)
 
 1. Masuk ke https://dash.cloudflare.com → Workers & Pages.
 2. Buat aplikasi Pages dan pilih Import an existing Git repository / Connect to Git.
@@ -122,3 +123,39 @@ Terdapat pembatasan login best-effort per instance Worker, belum pembatasan glob
 5. Logout dan pastikan /admin/editor/ mengarahkan kembali ke halaman login.
 
 Catatan: Pages CMS eksternal tetap membutuhkan autentikasi GitHub tersendiri. Sistem login ini hanya mengendalikan editor kustom internal.
+
+
+## Patch integrasi CMS langsung (31 Oktober 2026)
+
+CMS utama berjalan di situs sendiri: login melalui `/admin/`, kemudian `/admin/editor/`.
+Halaman pengelolaan ini tidak perlu dialihkan ke app.pagescms.org.
+
+Alur:
+1. Browser login ke `POST /api/admin/login` lewat Cloudflare Worker.
+2. Worker memvalidasi password dari `ADMIN_PASSWORD` Secret, membuat sesi bertanda tangan `SESSION_SECRET`.
+3. Panel melakukan `GET /api/admin/integration` untuk menguji akses GitHub asli melalui `GITHUB_TOKEN`, menampilkan koneksi, repository, branch, dan jumlah artikel.
+4. Editor mengambil artikel melalui `GET /api/admin/articles` dan menyimpan perubahan menggunakan `POST /api/admin/articles`.
+5. Commit GitHub dibuat langsung oleh Worker. Git integration Workers Builds (jika diaktifkan pada branch `main`) akan melakukan build dan deployment otomatis ketika commit dipush.
+6. Status penyimpanan GitHub **tidak sama** dengan status sudah live di Cloudflare. Periksa tab Deployments bila artikel belum terbit.
+
+Dukungan editor: draft/publikasi, featured, kategori, sampul, unggah media, pratinjau lokal, dan tautan commit GitHub. Terdapat tombol **Periksa koneksi** pada sidebar untuk diagnosis tanpa keluar dari CMS.
+
+### Penting mengenai konfigurasi Cloudflare
+
+Gunakan **Cloudflare Workers** (bukan Pages statis), worker name `lenteraekonomi` sesuai `wrangler.jsonc`. Pada Settings → Builds, pastikan repository `bravocompanion/lenteraekonomi`, branch `main` dan automatic builds telah aktif. Build: `npm run build`; Deploy: `npm run deploy`.
+
+Tambahkan **Secret** `ADMIN_PASSWORD`, `SESSION_SECRET`, `GITHUB_TOKEN`. Semua nilai harus dipasang di Cloudflare, bukan commit GitHub. Fine-grained token GitHub harus mempunyai izin **Contents: Read and write** hanya untuk repository ini.
+
+Jika sidebar menunjukkan **GitHub tidak terhubung**, periksa bahwa `GITHUB_TOKEN` masih berlaku, memiliki izin baca/tulis, dan repository benar. Jika login gagal dengan HTTP 503, periksa ketiga Secret.
+
+### Pengujian sederhana
+
+1. Buka `/api/admin/session` tanpa login: setelah Secret tersedia seharusnya respons `{"ok":true,"authenticated":false}`.
+2. Buka `/admin/editor/` tanpa login: seharusnya redirect ke `/admin/`.
+3. Login, cek status **GitHub terhubung** di sidebar.
+4. Buat artikel baru sebagai **draft**, simpan, lalu klik tautan commit GitHub.
+5. Edit draft dan centang **Publikasikan artikel**, simpan, lalu tunggu build selesai di Cloudflare; setelahnya buka halaman publik.
+6. Gunakan **Pratinjau naskah** untuk melihat susunan konten sebelum menyimpan.
+
+**Penting:** Keberadaan commit, hasil build lokal, atau status koneksi GitHub belum membuktikan website sudah live. Deployment harus sukses dan domain benar-benar terhubung.
+
