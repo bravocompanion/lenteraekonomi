@@ -4,7 +4,7 @@ description: "Panduan sederhana menyusun anggaran yang sesuai kondisi nyata, buk
 category: "Keuangan Pribadi"
 date: "2026-10-27"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/mengatur-uang-bulanan.webp"
 published: true
 featured: false
 ---

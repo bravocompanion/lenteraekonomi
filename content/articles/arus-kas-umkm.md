@@ -4,7 +4,7 @@ description: "Pelajari perbedaan laba dan arus kas agar usaha lebih siap memenuh
 category: "Bisnis & UMKM"
 date: "2026-10-26"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/arus-kas-umkm.webp"
 published: true
 featured: false
 ---

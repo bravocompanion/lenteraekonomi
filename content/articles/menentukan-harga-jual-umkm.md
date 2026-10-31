@@ -4,7 +4,7 @@ description: "Hubungkan biaya, margin, pelanggan, dan kondisi pasar untuk mengam
 category: "Bisnis & UMKM"
 date: "2026-10-18"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/menentukan-harga-jual-umkm.webp"
 published: true
 featured: false
 ---

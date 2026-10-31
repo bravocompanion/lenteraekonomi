@@ -4,7 +4,7 @@ description: "Inflasi bukan sekadar harga cabai atau beras naik. Kenali penyebab
 category: "Dasar Ekonomi"
 date: "2026-10-29"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/inflasi-kenapa-harga-naik.webp"
 published: true
 featured: true
 ---

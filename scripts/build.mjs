@@ -66,13 +66,22 @@ function markdown(text){
 }
 const logo='<img class="brand-logo" src="/assets/logo-lentera-ekonomi.svg" width="244" height="54" alt="Lentera Ekonomi">';
 const footerLogo='<img class="brand-logo" src="/assets/logo-lentera-ekonomi-light.svg" width="244" height="54" alt="Lentera Ekonomi">';
-function shell(title,description,body,url,article=false,metadata=''){
+function shell(title,description,body,url,article=false,metadata='',socialImage=''){
+ const chosenImage = socialImage && /^(https?:\/\/|\/media\/)/i.test(socialImage) ? socialImage : '/media/open-graph-lentera-ekonomi.jpg';
+ const imageUrl = chosenImage.startsWith('/') ? BASE + chosenImage : chosenImage;
+ const webpSocial = /\.webp(?:\?.*)?$/i.test(chosenImage);
  const nav='<a href="/">Beranda</a><a href="/artikel/">Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a><a class="nav-cta" href="/artikel/">Mulai Belajar ↗</a>';
  return '<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
  '<meta name="theme-color" content="#215b46"><meta name="description" content="'+esc(description)+'"><link rel="canonical" href="'+BASE+url+'">'+
  '<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><meta property="og:site_name" content="Lentera Ekonomi">'+
  '<meta property="og:type" content="'+(article?'article':'website')+'"><meta property="og:url" content="'+BASE+url+'">'+
- '<meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(description)+'">'+metadata+
+ '<meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(description)+'">'+
+ '<meta property="og:locale" content="id_ID">'+
+ '<meta property="og:image" content="'+esc(imageUrl)+'"><meta property="og:image:type" content="'+(webpSocial?'image/webp':'image/jpeg')+'">'+
+ '<meta property="og:image:width" content="'+(webpSocial?'1600':'1200')+'"><meta property="og:image:height" content="'+(webpSocial?'900':'630')+'">'+
+ '<meta property="og:image:alt" content="'+esc(article?title:'Lentera Ekonomi — edukasi ekonomi untuk semua')+'">'+
+ '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="'+esc(title)+'">'+
+ '<meta name="twitter:description" content="'+esc(description)+'"><meta name="twitter:image" content="'+esc(imageUrl)+'">'+metadata+
  '<title>'+esc(title)+' | Lentera Ekonomi</title><link rel="stylesheet" href="/assets/styles.css"><link rel="stylesheet" href="/assets/editorial.css"><script defer src="/assets/app.js"></script></head>'+
  '<body><a class="skip-link" href="#konten">Lewati ke konten</a>'+(article?'<div class="progress" data-reading-progress></div>':'')+
  '<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/">'+logo+'</a>'+
@@ -149,7 +158,7 @@ function article(a,articles){
  '<div class="related-section"><span class="overline">BACAAN LAINNYA</span><h2>Lanjutkan eksplorasi</h2><div class="related-grid">'+related.map(b=>card(b)).join('')+'</div></div></div>'+
  '<aside class="article-sidebar">'+toc+'<div class="side-panel"><div class="side-panel-eyebrow">BAGIKAN ARTIKEL</div><p>Pengetahuan lebih berarti ketika dibagikan.</p><button type="button" class="share-btn" data-share>Salin tautan artikel ↗</button></div></aside></div></div>';
  const json={'@context':'https://schema.org','@type':'Article',headline:a.title,description:a.description,datePublished:a.date,author:{'@type':'Person',name:a.author||'Redaksi Lentera Ekonomi'},publisher:{'@type':'Organization',name:'Lentera Ekonomi'},mainEntityOfPage:BASE+url};
- return shell(a.title,a.description,body,url,true,'<meta property="article:published_time" content="'+esc(a.date)+'"><script type="application/ld+json">'+JSON.stringify(json).replace(/</g,'\\u003c')+'</script>');
+ return shell(a.title,a.description,body,url,true,'<meta property="article:published_time" content="'+esc(a.date)+'"><script type="application/ld+json">'+JSON.stringify(json).replace(/</g,'\\u003c')+'</script>',a.cover);
 }
 function category(t,articles){
  const found=articles.filter(a=>a.category===t.name);

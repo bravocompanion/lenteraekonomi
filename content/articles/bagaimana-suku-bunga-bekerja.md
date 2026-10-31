@@ -4,7 +4,7 @@ description: "Kenali pengaruh suku bunga terhadap tabungan, pinjaman, konsumsi, 
 category: "Dasar Ekonomi"
 date: "2026-10-24"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/bagaimana-suku-bunga-bekerja.webp"
 published: true
 featured: false
 ---

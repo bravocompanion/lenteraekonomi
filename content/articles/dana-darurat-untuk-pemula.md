@@ -4,7 +4,7 @@ description: "Memahami fungsi dana darurat serta menentukan target yang realisti
 category: "Keuangan Pribadi"
 date: "2026-10-17"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/dana-darurat-untuk-pemula.webp"
 published: true
 featured: false
 ---

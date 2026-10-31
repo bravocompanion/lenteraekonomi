@@ -4,7 +4,7 @@ description: "Pelajari nilai dari pilihan terbaik yang tidak jadi diambil ketika
 category: "Dasar Ekonomi"
 date: "2026-10-20"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/biaya-peluang-dalam-keputusan.webp"
 published: true
 featured: false
 ---

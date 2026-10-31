@@ -4,7 +4,7 @@ description: "Mengapa pertumbuhan ekonomi penting, tetapi tidak selalu menggamba
 category: "Ekonomi Indonesia"
 date: "2026-10-22"
 author: "Redaksi Lentera Ekonomi"
-cover: ""
+cover: "/media/covers/pertumbuhan-ekonomi-dan-kesejahteraan.webp"
 published: true
 featured: false
 ---
