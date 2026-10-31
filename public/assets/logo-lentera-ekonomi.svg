@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 137" role="img" aria-label="Lentera Ekonomi"><title>Lentera Ekonomi</title><defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff3bd"/><stop offset=".38" stop-color="#e8c879"/><stop offset=".72" stop-color="#c9a053"/><stop offset="1" stop-color="#f6d994"/></linearGradient><linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#255f45"/><stop offset=".57" stop-color="#103c2e"/><stop offset="1" stop-color="#082d24"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff9df"/><stop offset="1" stop-color="#d8b86a"/></linearGradient></defs><g transform="translate(0,2)"><g stroke-linejoin="round" stroke-linecap="round">
+ <path d="M12 101Q35 87 60 103Q85 87 109 101L105 116Q79 106 60 121Q39 105 16 116Z" fill="url(#green)" stroke="#cda85c" stroke-width="2"/>
+ <path d="M18 93Q42 84 60 102Q82 84 102 93L100 107Q78 96 60 112Q38 97 20 107Z" fill="url(#gold)" stroke="#103d2d" stroke-width="2"/>
+ <path d="M60 102V111" stroke="#1a513a" stroke-width="2"/>
+ <path d="M43 39V91H78V39Z" fill="url(#glass)" stroke="#0f3e2d" stroke-width="5"/>
+ <path d="M35 41Q60 33 85 41L81 49H39Z" fill="url(#green)" stroke="url(#gold)" stroke-width="2"/>
+ <path d="M39 33Q43 19 60 18Q77 19 81 33Z" fill="url(#green)" stroke="#caa65a" stroke-width="2"/>
+ <path d="M56 18V12A4 4 0 0 1 64 12V18" stroke="url(#gold)" stroke-width="3" fill="none"/>
+ <path d="M47 48V88M73 48V88" stroke="#0c3d2b" stroke-width="4"/>
+ <path d="M61 83C48 70 55 60 63 52C59 63 73 65 69 75C67 81 64 83 61 83Z" fill="#d4a652"/>
+ <path d="M60 82C58 73 65 70 64 66C72 73 68 81 60 82Z" fill="#fff0bd"/>
+ <path d="M34 88H85V95H34Z" fill="url(#green)" stroke="#d6b468" stroke-width="2"/>
+ <path d="M80 71Q94 63 103 46" stroke="#cba758" stroke-width="4" fill="none"/>
+ <path d="M97 47L108 40L107 53Z" fill="#d8b66d"/>
+ </g></g><text x="143" y="85" font-family="Georgia,'Times New Roman',serif" font-size="64" letter-spacing="-3.5" font-weight="700" fill="#16402e">Lentera</text><text x="363" y="85" font-family="Georgia,'Times New Roman',serif" font-size="64" letter-spacing="-3.7" font-weight="700" fill="#b7914b">Ekonomi</text><text x="148" y="110" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" letter-spacing="5" fill="#678c74">BELAJAR JADI PAHAM</text></svg>

@@ -64,7 +64,8 @@ function markdown(text){
  flush();if(codeOpen)out.push('<pre><code>'+esc(code.join('\n'))+'</code></pre>');
  return out.join('\n');
 }
-const logo='<span class="brand-mark" aria-hidden="true">L</span><span>Lentera <b>Ekonomi</b><small>Belajar jadi paham</small></span>';
+const logo='<img class="brand-logo" src="/assets/logo-lentera-ekonomi.svg" width="244" height="54" alt="Lentera Ekonomi">';
+const footerLogo='<img class="brand-logo" src="/assets/logo-lentera-ekonomi-light.svg" width="244" height="54" alt="Lentera Ekonomi">';
 function shell(title,description,body,url,article=false,metadata=''){
  const nav='<a href="/">Beranda</a><a href="/artikel/">Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a><a class="nav-cta" href="/artikel/">Mulai Belajar ↗</a>';
  return '<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
@@ -78,7 +79,7 @@ function shell(title,description,body,url,article=false,metadata=''){
  '<nav class="nav-links" id="nav" data-mobile-nav>'+nav+'</nav>'+
  '<button class="menu-toggle" data-menu-toggle aria-controls="nav" aria-expanded="false" aria-label="Buka menu" type="button">☰</button></div></header>'+
  '<main id="konten">'+body+'</main>'+
- '<footer class="site-footer"><div class="wrap"><div class="footer-top"><div><a class="brand" href="/">'+logo+'</a>'+
+ '<footer class="site-footer"><div class="wrap"><div class="footer-top"><div><a class="brand" href="/">'+footerLogo+'</a>'+
  '<p>Ruang belajar ekonomi yang lebih dekat dengan kehidupan. Pahami sebab dan akibatnya, bukan sekadar angka.</p></div>'+
  '<div class="footer-links"><div><h4>Jelajahi</h4><a href="/">Beranda</a><a href="/artikel/">Semua Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a></div>'+
  '<div><h4>Pengelolaan</h4><a href="/admin/">Masuk CMS</a><a href="https://app.pagescms.org" target="_blank" rel="noopener noreferrer">Panel Editor ↗</a></div></div></div>'+
@@ -87,7 +88,7 @@ function shell(title,description,body,url,article=false,metadata=''){
 function cover(a){
  const t=topic(a.category),image=a.cover&&/^(https?:\/\/|\/media\/)/.test(a.cover);
  return '<div class="cover-art'+(image?' has-image':'')+'" style="--cover-bg:'+t.bg+';--cover-ink:'+t.color+';--cover-line:'+t.color+'">'+
- '<span class="cover-mini">'+esc(t.name)+'</span>'+(image?'<img loading="lazy" src="'+esc(a.cover)+'" alt="'+esc(a.title)+'">':'<span class="cover-symbol">'+esc(t.symbol)+'</span>')+'</div>';
+ '<span class="cover-mini">'+esc(t.name)+'</span>'+(image?'<img loading="lazy" src="'+esc(a.cover)+'" alt="'+esc(a.title)+'">':'<img class="cover-category-icon" src="/assets/icons/'+t.slug+'.svg" loading="lazy" alt="">')+'</div>';
 }
 function meta(a){return '<div class="article-meta"><span class="chip">'+esc(a.category)+'</span><span>·</span><time datetime="'+esc(a.date)+'">'+esc(date(a.date))+'</time><span>·</span><span>'+a.minutes+' menit baca</span></div>'}
 function card(a,feature=false){
@@ -104,7 +105,7 @@ function home(articles){
   '<p>'+esc(featured.description)+'</p><a class="editor-pick-link" href="/artikel/'+featured.slug+'/">Baca selengkapnya <span aria-hidden="true">↗</span></a></div></div>':'';
  const topicCards=topics.map((t,i)=>{
   const n=articles.filter(a=>a.category===t.name).length;
-  return '<a class="topic-card" href="/kategori/'+t.slug+'/"><div class="topic-card-top"><span class="topic-icon" aria-hidden="true">'+t.icon+'</span><span class="topic-index">0'+(i+1)+'</span></div><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p><div class="topic-card-bottom"><span>'+n+' artikel</span><span aria-hidden="true">↗</span></div></a>';
+  return '<a class="topic-card" href="/kategori/'+t.slug+'/"><div class="topic-card-top"><span class="topic-icon" aria-hidden="true"><img src="/assets/icons/'+t.slug+'.svg" loading="lazy" alt=""></span><span class="topic-index">0'+(i+1)+'</span></div><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p><div class="topic-card-bottom"><span>'+n+' artikel</span><span aria-hidden="true">↗</span></div></a>';
  }).join('');
  const more=remaining.length>6?'<a class="button secondary" href="/artikel/">Lihat seluruh artikel <span aria-hidden="true">↗</span></a>':'<a class="button secondary" href="/artikel/">Jelajahi perpustakaan <span aria-hidden="true">↗</span></a>';
  const body='<section class="front-hero"><div class="wrap"><div class="front-topline"><span><span class="front-topline-mark">✳</span> LENTERA EKONOMI <span class="topline-dash">/</span> PUSAT LITERASI</span><span>WAWASAN YANG LEBIH DEKAT DENGAN KEHIDUPAN</span></div>'+

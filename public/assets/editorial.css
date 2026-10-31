@@ -293,3 +293,18 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #d49e
  .footer-links{gap:43px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* Lentera Ekonomi logo and icon integration */
+.brand{display:inline-flex;align-items:center;gap:0;line-height:1;flex-shrink:0}
+.brand .brand-logo{display:block;width:244px;height:auto;max-width:100%;object-fit:contain}
+.site-footer .brand .brand-logo{width:250px}
+.site-header .brand:hover .brand-logo{opacity:.87}
+.topic-card .topic-icon{width:58px;height:58px;display:grid;place-items:center;background:#f6f5ed;border:1px solid #e9e6d9;border-radius:13px;padding:5px}
+.topic-card .topic-icon img{width:100%;height:100%;object-fit:contain;display:block}
+.cover-art .cover-category-icon{position:relative;z-index:1;display:block;width:clamp(100px,44%,164px);height:82%;max-height:175px;object-fit:contain;filter:drop-shadow(0 8px 11px rgba(16,58,38,.08))}
+.editor-pick .cover-art .cover-category-icon{height:90%;max-height:190px;width:46%}
+.article-cover .cover-art .cover-category-icon{height:75%;max-height:235px;width:40%;filter:drop-shadow(0 11px 20px rgba(16,58,38,.1))}
+.related-grid .cover-art .cover-category-icon{max-height:130px}
+@media(max-width:760px){.site-header .brand .brand-logo{width:205px}.site-footer .brand .brand-logo{width:222px}.editor-pick .cover-art .cover-category-icon{height:90%;max-height:170px;width:52%}}
+@media(max-width:440px){.site-header .brand .brand-logo{width:188px}.topic-card .topic-icon{width:56px;height:56px}.article-cover .cover-art .cover-category-icon{width:58%}}
