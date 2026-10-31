@@ -72,7 +72,7 @@ function shell(title,description,body,url,article=false,metadata=''){
  '<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><meta property="og:site_name" content="Lentera Ekonomi">'+
  '<meta property="og:type" content="'+(article?'article':'website')+'"><meta property="og:url" content="'+BASE+url+'">'+
  '<meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(description)+'">'+metadata+
- '<title>'+esc(title)+' | Lentera Ekonomi</title><link rel="stylesheet" href="/assets/styles.css"><script defer src="/assets/app.js"></script></head>'+
+ '<title>'+esc(title)+' | Lentera Ekonomi</title><link rel="stylesheet" href="/assets/styles.css"><link rel="stylesheet" href="/assets/editorial.css"><script defer src="/assets/app.js"></script></head>'+
  '<body><a class="skip-link" href="#konten">Lewati ke konten</a>'+(article?'<div class="progress" data-reading-progress></div>':'')+
  '<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/">'+logo+'</a>'+
  '<nav class="nav-links" id="nav" data-mobile-nav>'+nav+'</nav>'+
@@ -97,28 +97,32 @@ function card(a,feature=false){
  '<h3><a href="'+href+'">'+esc(a.title)+'</a></h3><p>'+esc(a.description)+'</p><a class="story-read" href="'+href+'">Baca artikel →</a></div></article>';
 }
 function home(articles){
- const first=articles.find(a=>a.featured)||articles[0],selected=first?[first,...articles.filter(a=>a!==first)].slice(0,5):[];
- const charts='<svg viewBox="0 0 430 260" fill="none" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4d77c" stop-opacity=".32"/><stop offset="1" stop-color="#f4d77c" stop-opacity="0"/></linearGradient></defs>'+
- '<path d="M0 40H430M0 95H430M0 150H430M0 205H430" stroke="#83b39b" stroke-opacity=".25" stroke-dasharray="5 7"/>'+
- '<path d="M0 222C40 220 60 170 95 182S165 155 197 144 240 175 280 98 335 121 365 76 402 49 430 25V260H0Z" fill="url(#area)"/>'+
- '<path d="M0 222C40 220 60 170 95 182S165 155 197 144 240 175 280 98 335 121 365 76 402 49 430 25" stroke="#f6d77b" stroke-width="4" stroke-linecap="round"/><circle cx="365" cy="76" r="8" fill="#f6d77b" stroke="#20553c" stroke-width="4"/></svg>';
- const body='<section class="hero"><div class="wrap hero-grid"><div><div class="announcement"><span class="pulse"></span> Ruang belajar ekonomi untuk semua</div>'+
- '<h1>Ekonomi itu dekat.<br><em>Yuk, pahami.</em></h1><p class="lead">Dari harga kebutuhan sehari-hari sampai keputusan keuangan dan bisnis. Belajar ekonomi tak harus rumit—mulai dari hal yang paling dekat dengan kita.</p>'+
- '<div class="hero-actions"><a class="button primary" href="/artikel/">Jelajahi artikel ↗</a><a class="button secondary" href="#topik">Pilih topik belajar ↓</a></div>'+
- '<div class="hero-note"><span></span> Memahami lebih penting daripada sekadar menghafal.</div></div>'+
- '<div class="hero-art-wrap"><div class="doodle"></div><div class="hero-graphic"><div class="graphic-top"><div><div class="graphic-label">GAMBARAN EKONOMI</div><div class="graphic-number">Pahami polanya.</div></div><div class="graphic-icon">✳</div></div>'+
- '<div class="graph-area">'+charts+'</div><div class="graph-footer"><span>Pelajari perubahan</span><span>Ambil keputusan</span></div></div>'+
- '<div class="floating-card"><small>Yang penting dipahami</small><strong>Sebab &amp; akibat</strong><span class="spark">● Bukan sekadar angka</span></div></div></div></section>'+
- '<div class="ticker"><div class="wrap ticker-inner"><strong>TOPIK FAVORIT</strong><span>Inflasi</span><span>Menabung</span><span>Modal usaha</span><span>Pasar &amp; harga</span></div></div>'+
- '<section class="section" id="bacaan"><div class="wrap"><div class="section-heading"><div><span class="overline">Pojok pengetahuan</span><h2>Bacaan pilihan untukmu</h2>'+
- '<p class="section-intro">Penjelasan sederhana, contoh yang dekat dengan keseharian, dan ide-ide untuk dipahami lebih lanjut.</p></div><a class="text-link" href="/artikel/">Lihat semua artikel ↗</a></div>'+
- '<div class="story-grid">'+selected.map((a,i)=>card(a,i===0)).join('')+'</div></div></section>'+
- '<section class="section alt" id="topik"><div class="wrap"><div class="section-heading"><div><span class="overline">Mulai dari yang menarik</span><h2>Jelajahi berdasarkan topik</h2>'+
- '<p class="section-intro">Pilih pembahasan yang ingin kamu kuasai, satu artikel dalam satu waktu.</p></div></div><div class="topic-grid">'+
- topics.map(t=>'<a class="topic-card" href="/kategori/'+t.slug+'/"><div class="topic-icon">'+t.icon+'</div><span class="arrow">↗</span><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p></a>').join('')+
- '</div></div></section><section class="section"><div class="wrap"><div class="statement"><div><span class="overline" style="color:#b9d7b9">Belajar tanpa harus rumit</span>'+
- '<h2>Keputusan yang baik dimulai dari <em>pemahaman yang baik.</em></h2><p>Mulai dari konsep dasarnya, lalu hubungkan dengan kehidupan nyata.</p></div><a class="button" href="/artikel/">Mulai membaca ↗</a></div></div></section>';
- return shell('Belajar Ekonomi dengan Cara Sederhana','Edukasi ekonomi untuk semua: dasar ekonomi, keuangan pribadi, bisnis dan UMKM, serta ekonomi Indonesia.',body,'/');
+ const featured=articles.find(a=>a.featured)||articles[0],remaining=articles.filter(a=>a!==featured),latest=remaining.slice(0,6);
+ const heroFeature=featured?'<div class="editor-pick"><div class="editor-pick-head"><span><span class="eyebrow-dot"></span> PILIHAN REDAKSI</span><span>01 / ARTIKEL UNGGULAN</span></div>'+
+  '<a class="editor-pick-image" href="/artikel/'+featured.slug+'/" aria-label="Baca '+esc(featured.title)+'">'+cover(featured)+'</a>'+
+  '<div class="editor-pick-content">'+meta(featured)+'<h2><a href="/artikel/'+featured.slug+'/">'+esc(featured.title)+'</a></h2>'+
+  '<p>'+esc(featured.description)+'</p><a class="editor-pick-link" href="/artikel/'+featured.slug+'/">Baca selengkapnya <span aria-hidden="true">↗</span></a></div></div>':'';
+ const topicCards=topics.map((t,i)=>{
+  const n=articles.filter(a=>a.category===t.name).length;
+  return '<a class="topic-card" href="/kategori/'+t.slug+'/"><div class="topic-card-top"><span class="topic-icon" aria-hidden="true">'+t.icon+'</span><span class="topic-index">0'+(i+1)+'</span></div><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p><div class="topic-card-bottom"><span>'+n+' artikel</span><span aria-hidden="true">↗</span></div></a>';
+ }).join('');
+ const more=remaining.length>6?'<a class="button secondary" href="/artikel/">Lihat seluruh artikel <span aria-hidden="true">↗</span></a>':'<a class="button secondary" href="/artikel/">Jelajahi perpustakaan <span aria-hidden="true">↗</span></a>';
+ const body='<section class="front-hero"><div class="wrap"><div class="front-topline"><span><span class="front-topline-mark">✳</span> LENTERA EKONOMI <span class="topline-dash">/</span> PUSAT LITERASI</span><span>WAWASAN YANG LEBIH DEKAT DENGAN KEHIDUPAN</span></div>'+
+ '<div class="front-hero-grid"><div class="front-hero-copy"><div class="eyebrow"><span class="eyebrow-line"></span> SELAMAT DATANG DI LENTERA EKONOMI</div>'+
+ '<h1>Ekonomi lebih mudah saat <em>kita memahaminya.</em></h1><p>Belajar tentang uang, pasar, bisnis, dan perubahan ekonomi dengan penjelasan yang jernih dan dekat dengan keseharian.</p>'+
+ '<div class="front-hero-actions"><a class="button primary" href="/artikel/">Mulai membaca <span aria-hidden="true">↗</span></a><a class="front-text-link" href="#topik">Lihat topik belajar <span aria-hidden="true">↓</span></a></div>'+
+ '<div class="front-hero-bottom"><span class="hero-small-icon" aria-hidden="true">✦</span><span>Ide besar, dijelaskan dengan bahasa sederhana.</span></div></div>'+
+ heroFeature+'</div></div></section>'+
+ '<div class="editorial-ribbon"><div class="wrap ribbon-inner"><span>UNTUK SEMUA PEMBELAJAR</span><span><i aria-hidden="true">●</i> Bahasa yang mudah dimengerti</span><span><i aria-hidden="true">●</i> Contoh dari kehidupan nyata</span><span><i aria-hidden="true">●</i> Konten yang terus berkembang</span></div></div>'+
+ '<section class="section latest-section"><div class="wrap"><div class="section-heading"><div><span class="overline">JURNAL LENTERA / TERBARU</span><h2>Wawasan terbaru</h2><p class="section-intro">Temukan penjelasan yang membantu kamu melihat persoalan ekonomi dari sudut pandang yang lebih jelas.</p></div><a class="text-link" href="/artikel/">Semua artikel <span aria-hidden="true">↗</span></a></div>'+
+ '<div class="editorial-grid">'+latest.map(a=>card(a)).join('')+'</div><div class="latest-bottom">'+more+'</div></div></section>'+
+ '<section class="section topic-section" id="topik"><div class="wrap"><div class="section-heading"><div><span class="overline">RUANG BELAJAR / KATEGORI</span><h2>Jelajahi topik ekonomi</h2><p class="section-intro">Pilih topik yang paling menarik untukmu dan pelajari satu konsep pada satu waktu.</p></div></div><div class="topic-grid">'+topicCards+'</div></div></section>'+
+ '<section class="section guide-section"><div class="wrap"><div class="learning-panel"><div class="learning-panel-copy"><span class="overline">MULAI DARI SINI</span><h2>Baru mengenal ekonomi?<br><em>Kita mulai dari dasarnya.</em></h2><p>Tidak perlu istilah rumit untuk memahami bagaimana harga terbentuk, mengapa pilihan memiliki konsekuensi, dan bagaimana uang bergerak.</p><a class="button light-button" href="/kategori/dasar-ekonomi/">Pelajari ekonomi dasar <span aria-hidden="true">↗</span></a></div>'+
+ '<div class="learning-path" aria-label="Tahapan belajar"><div class="learning-path-title">ALUR BELAJAR</div><a href="/kategori/dasar-ekonomi/"><span>01</span><div><strong>Pahami konsepnya</strong><small>Mulai dari kebutuhan, harga, dan pasar</small></div><b aria-hidden="true">↗</b></a>'+
+ '<a href="/kategori/keuangan-pribadi/"><span>02</span><div><strong>Hubungkan dengan uangmu</strong><small>Latihan membuat pilihan keuangan</small></div><b aria-hidden="true">↗</b></a>'+
+ '<a href="/kategori/bisnis-umkm/"><span>03</span><div><strong>Lihat gambaran besarnya</strong><small>Temukan kaitannya dengan dunia usaha</small></div><b aria-hidden="true">↗</b></a></div></div></div></section>'+
+ '<section class="section mission-section"><div class="wrap mission-row"><div><span class="overline">TENTANG LENTERA EKONOMI</span><h2>Lebih paham hari ini.<br>Lebih bijak esok hari.</h2></div><div><p>Kami percaya pemahaman ekonomi seharusnya dapat diakses siapa pun. Karena setiap keputusan, sekecil apa pun, memiliki cerita ekonomi di belakangnya.</p><a class="text-link" href="/tentang/">Kenali Lentera Ekonomi <span aria-hidden="true">↗</span></a></div></div></section>';
+ return shell('Belajar Ekonomi dengan Cara Sederhana','Lentera Ekonomi: artikel dan panduan edukasi ekonomi, keuangan pribadi, bisnis UMKM, dan ekonomi Indonesia dengan bahasa yang mudah dipahami.',body,'/');
 }
 function listing(articles){
  const buttons=['Semua',...topics.map(t=>t.name)].map((n,i)=>'<button class="filter-btn'+(i?'':' active')+'" type="button" data-filter="'+esc(n)+'" aria-pressed="'+(!i)+'">'+esc(n)+'</button>').join('');
@@ -134,14 +138,15 @@ function listing(articles){
 function article(a,articles){
  const url='/artikel/'+a.slug+'/',same=articles.filter(b=>b!==a&&b.category===a.category);
  const related=[...same,...articles.filter(b=>b!==a&&b.category!==a.category)].slice(0,2);
- const body='<div class="wrap article-shell"><div class="breadcrumb"><a href="/">Beranda</a> / <a href="/artikel/">Artikel</a> / '+esc(a.category)+'</div>'+
- '<div class="article-layout"><div><header class="article-header">'+meta(a)+'<h1>'+esc(a.title)+'</h1><p class="dek">'+esc(a.description)+'</p>'+
- '<div class="article-author"><span class="avatar">LE</span><div><strong>'+esc(a.author||'Redaksi Lentera Ekonomi')+'</strong><span>'+esc(date(a.date))+' · '+a.minutes+' menit baca</span></div></div></header>'+
+ const headings=Array.from(a.body.matchAll(/^##\s+(.+)$/gm)).map(m=>m[1]).slice(0,12);
+ const toc=headings.length?'<div class="side-panel toc-panel"><div class="side-panel-eyebrow">DALAM ARTIKEL INI</div><nav aria-label="Daftar isi">'+headings.map((h,i)=>'<a href="#'+slug(h)+'"><span>0'+(i+1)+'</span>'+esc(h)+'</a>').join('')+'</nav></div>':'';
+ const body='<div class="wrap article-shell"><div class="breadcrumb"><a href="/">Beranda</a> <span aria-hidden="true">/</span> <a href="/artikel/">Artikel</a> <span aria-hidden="true">/</span> '+esc(a.category)+'</div>'+
+ '<div class="article-layout"><div><header class="article-header"><div class="article-kicker"><span class="chip">'+esc(a.category)+'</span><span>ARTIKEL LENTERA EKONOMI</span></div><h1>'+esc(a.title)+'</h1><p class="dek">'+esc(a.description)+'</p>'+
+ '<div class="article-author"><span class="avatar" aria-hidden="true">LE</span><div><strong>'+esc(a.author||'Redaksi Lentera Ekonomi')+'</strong><span><time datetime="'+esc(a.date)+'">'+esc(date(a.date))+'</time> <span aria-hidden="true">·</span> '+a.minutes+' menit baca</span></div></div></header>'+
  '<div class="article-cover">'+cover(a)+'</div><div class="article-body">'+markdown(a.body)+'</div>'+
- '<div class="related-section"><span class="overline">Lanjut membaca</span><h2>Artikel lainnya</h2><div class="related-grid">'+related.map(b=>card(b)).join('')+'</div></div></div>'+
- '<aside class="article-sidebar"><div class="side-panel"><h3>Ringkasan</h3><p>'+esc(a.description)+'</p>'+
- '<a class="side-link" href="/kategori/'+topic(a.category).slug+'/">Lihat topik '+esc(a.category)+' ↗</a></div>'+
- '<div class="side-panel"><h3>Bagikan pengetahuan</h3><p>Bagikan artikel ini jika bermanfaat.</p><button type="button" class="share-btn" data-share>Bagikan / salin tautan ↗</button></div></aside></div></div>';
+ '<div class="article-end-note"><span class="article-end-icon" aria-hidden="true">✳</span><div><strong>Terus bertumbuh lewat pengetahuan.</strong><p>Sudah selesai membaca? Temukan sudut pandang baru di artikel selanjutnya.</p><a href="/artikel/">Jelajahi semua artikel ↗</a></div></div>'+
+ '<div class="related-section"><span class="overline">BACAAN LAINNYA</span><h2>Lanjutkan eksplorasi</h2><div class="related-grid">'+related.map(b=>card(b)).join('')+'</div></div></div>'+
+ '<aside class="article-sidebar">'+toc+'<div class="side-panel"><div class="side-panel-eyebrow">BAGIKAN ARTIKEL</div><p>Pengetahuan lebih berarti ketika dibagikan.</p><button type="button" class="share-btn" data-share>Salin tautan artikel ↗</button></div></aside></div></div>';
  const json={'@context':'https://schema.org','@type':'Article',headline:a.title,description:a.description,datePublished:a.date,author:{'@type':'Person',name:a.author||'Redaksi Lentera Ekonomi'},publisher:{'@type':'Organization',name:'Lentera Ekonomi'},mainEntityOfPage:BASE+url};
  return shell(a.title,a.description,body,url,true,'<meta property="article:published_time" content="'+esc(a.date)+'"><script type="application/ld+json">'+JSON.stringify(json).replace(/</g,'\\u003c')+'</script>');
 }
