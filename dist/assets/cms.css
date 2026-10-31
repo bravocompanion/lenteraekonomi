@@ -1,0 +1,68 @@
+/* Private Lentera Ekonomi editor interface */
+.cms-root{min-height:62vh}
+.cms-root,.cms-root input,.cms-root textarea,.cms-root select,.cms-root button{font-family:'DM Sans',Arial,sans-serif}
+.cms-login-wrap{min-height:74vh;display:grid;place-items:center;padding:64px 18px;background:radial-gradient(ellipse at top left,#e3eee0 0,transparent 45%),#f9faf6}
+.cms-login-card{width:min(100%,450px);padding:43px 39px;background:#fff;border:1px solid #e1e9df;border-radius:21px;box-shadow:0 25px 60px #1b4a3320}
+.cms-login-icon{width:60px;height:60px;background:#edf4e9;border-radius:16px;display:grid;place-items:center;margin-bottom:23px}
+.cms-login-icon img{height:52px;width:52px}
+.cms-eyebrow{letter-spacing:.15em;color:#427a58;font-size:11px;font-weight:800;margin:0 0 11px}
+.cms-login-card h1{font-family:'Newsreader',Georgia,serif;font-size:43px;font-weight:500;line-height:1.09;margin-bottom:13px}
+.cms-login-card>p:not(.cms-eyebrow){font-size:13px;color:#6b7a6d;margin-bottom:25px;line-height:1.75}
+.cms-field{display:flex;flex-direction:column;gap:7px;margin-bottom:17px;min-width:0}
+.cms-field label{font-size:12px;font-weight:800;color:#365a43}
+.cms-field input,.cms-field select,.cms-field textarea,.cms-search{width:100%;border:1px solid #d9e4d8;border-radius:10px;background:#fff;color:#233f2f;padding:12px 13px;font-size:14px;min-height:46px;outline:none}
+.cms-field textarea{min-height:100px;resize:vertical;line-height:1.65}
+.cms-field textarea[name=body]{min-height:340px;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.cms-field input:focus,.cms-field textarea:focus,.cms-field select:focus,.cms-search:focus{border-color:#4e8c60;box-shadow:0 0 0 3px #b0d6b647}
+.cms-field input:disabled{color:#748579;background:#f5f7f2}
+.cms-field small{font-size:11px;color:#869388;line-height:1.55}
+.cms-action{background:#1d5138;color:#fff;border:0;min-height:46px;border-radius:10px;padding:11px 19px;font-weight:800;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.cms-action:hover{background:#2f694b}
+.cms-action:disabled{opacity:.56;cursor:wait}
+.cms-action.secondary{background:#e9f0e6;color:#295740}
+.cms-action.secondary:hover{background:#d7e7d7}
+.cms-action.danger{background:#fff1ee;color:#a74f42}
+.cms-action.danger:hover{background:#f9ddd8}
+.cms-action.full{width:100%}
+.cms-status{padding:13px 16px;border-radius:9px;background:#e8f0e7;font-size:12px;color:#316547;line-height:1.6;margin:16px 0}
+.cms-status[data-state=error]{background:#fff1ee;color:#9a382c}
+.cms-status[data-state=success]{background:#e6f4e6;color:#22613e}
+.cms-status[hidden]{display:none}
+.cms-login-note{display:block;font-size:11px;text-align:center;color:#8a9b8a;margin-top:18px}
+.cms-editor-outer{background:#f5f7f2;padding:37px 0 75px}
+.cms-editor-top{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:22px}
+.cms-editor-top h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:43px;margin:3px 0 5px}
+.cms-editor-top p{font-size:13px;color:#728478;margin:0}
+.cms-editor-grid{display:grid;grid-template-columns:295px minmax(0,1fr);gap:23px;align-items:start}
+.cms-sidebar,.cms-editor-panel{background:#fff;border:1px solid #e2e9df;border-radius:16px;box-shadow:0 7px 24px #15392b07}
+.cms-sidebar{padding:18px;position:sticky;top:100px;max-height:calc(100vh - 120px);display:flex;flex-direction:column}
+.cms-sidebar h2{font-size:16px;margin-bottom:14px}
+.cms-sidebar-actions{display:flex;flex-direction:column;gap:12px}
+.cms-sidebar-actions .cms-action{width:100%}
+.cms-search{min-height:43px;font-size:12px}
+.cms-count{font-size:11px;color:#8b968b;margin:15px 0 7px}
+.cms-article-list{overflow:auto;min-height:180px;max-height:55vh;display:flex;flex-direction:column;gap:7px}
+.cms-article-item{position:relative;border:1px solid transparent;background:#f9faf8;padding:12px 14px 13px;text-align:left;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:5px}
+.cms-article-item:hover,.cms-article-item.selected{border-color:#afcbb0;background:#eff6ed}
+.cms-article-item strong{font-size:12px;color:#2d5439;line-height:1.55;padding-right:2px}
+.cms-article-item span{font-size:10px;color:#849287}
+.cms-article-item em{font-style:normal;font-size:10px;font-weight:800;color:#a17445}
+.cms-article-item em[data-published=true]{color:#318050}
+.cms-empty{font-size:12px;color:#869587;margin:16px 0}
+.cms-editor-panel{padding:28px 33px}
+.cms-editor-panel h2{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:32px;margin:0 0 20px}
+.cms-form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cms-form-checks{display:flex;gap:25px;flex-wrap:wrap;margin:12px 0 22px;padding:17px 0;border-block:1px solid #e9eee7}
+.cms-form-checks label{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:#426248;cursor:pointer}
+.cms-form-checks input{width:17px;height:17px;accent-color:#286447}
+.cms-cover-preview{height:165px;display:grid;place-items:center;overflow:hidden;background:#eef4ed;border-radius:11px;margin:9px 0 12px;color:#8d9f8e;font-size:12px}
+.cms-cover-preview img{height:100%;width:100%;object-fit:cover}
+.cms-toolbar{display:flex;align-items:center;gap:15px;flex-wrap:wrap;padding-top:12px}
+.cms-file-label{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid #cfdccf;border-radius:9px;color:#326447;font-size:12px;font-weight:800;cursor:pointer}
+.cms-file-label input{position:absolute;width:1px;height:1px;opacity:0}
+.cms-file-label:focus-within{outline:2px solid #479f62;outline-offset:2px}
+.cms-help{font-size:11px;color:#768a7b;line-height:1.7;margin:4px 0 14px}
+.cms-form-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:22px;border-top:1px solid #e4ebe3;margin-top:19px;flex-wrap:wrap}
+.cms-form-bottom>div{display:flex;gap:11px;flex-wrap:wrap}
+@media(max-width:930px){.cms-editor-grid{grid-template-columns:245px minmax(0,1fr);gap:14px}.cms-editor-panel{padding:22px}.cms-form-row{grid-template-columns:1fr}}
+@media(max-width:720px){.cms-login-card{padding:33px 25px}.cms-login-card h1{font-size:37px}.cms-editor-outer{padding-top:25px}.cms-editor-grid{grid-template-columns:1fr}.cms-sidebar{position:static;max-height:none}.cms-article-list{max-height:260px}.cms-editor-top h1{font-size:37px}.cms-editor-panel{padding:22px 18px}.cms-form-row{grid-template-columns:1fr}.cms-editor-top{align-items:flex-start}.cms-editor-top .cms-action{min-width:105px}}

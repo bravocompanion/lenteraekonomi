@@ -82,7 +82,7 @@ function shell(title,description,body,url,article=false,metadata='',socialImage=
  '<meta property="og:image:alt" content="'+esc(article?title:'Lentera Ekonomi — edukasi ekonomi untuk semua')+'">'+
  '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="'+esc(title)+'">'+
  '<meta name="twitter:description" content="'+esc(description)+'"><meta name="twitter:image" content="'+esc(imageUrl)+'">'+metadata+
- '<title>'+esc(title)+' | Lentera Ekonomi</title><link rel="stylesheet" href="/assets/styles.css"><link rel="stylesheet" href="/assets/editorial.css"><script defer src="/assets/app.js"></script></head>'+
+ '<title>'+esc(title)+' | Lentera Ekonomi</title><link rel="stylesheet" href="/assets/styles.css"><link rel="stylesheet" href="/assets/editorial.css">'+(url.startsWith('/admin/')?'<meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/assets/cms.css"><script defer src="/assets/cms.js"></script>':'')+'<script defer src="/assets/app.js"></script></head>'+
  '<body><a class="skip-link" href="#konten">Lewati ke konten</a>'+(article?'<div class="progress" data-reading-progress></div>':'')+
  '<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/">'+logo+'</a>'+
  '<nav class="nav-links" id="nav" data-mobile-nav>'+nav+'</nav>'+
@@ -91,7 +91,7 @@ function shell(title,description,body,url,article=false,metadata='',socialImage=
  '<footer class="site-footer"><div class="wrap"><div class="footer-top"><div><a class="brand" href="/">'+footerLogo+'</a>'+
  '<p>Ruang belajar ekonomi yang lebih dekat dengan kehidupan. Pahami sebab dan akibatnya, bukan sekadar angka.</p></div>'+
  '<div class="footer-links"><div><h4>Jelajahi</h4><a href="/">Beranda</a><a href="/artikel/">Semua Artikel</a><a href="/#topik">Topik Belajar</a><a href="/tentang/">Tentang Kami</a></div>'+
- '<div><h4>Pengelolaan</h4><a href="/admin/">Masuk CMS</a><a href="https://app.pagescms.org" target="_blank" rel="noopener noreferrer">Panel Editor ↗</a></div></div></div>'+
+ '<div><h4>Pengelolaan</h4><a href="/admin/">Masuk CMS</a><a href="/admin/">Ruang Editor ↗</a></div></div></div>'+
  '<div class="footer-bottom"><span>© '+new Date().getUTCFullYear()+' Lentera Ekonomi. Edukasi untuk semua.</span><span>Konten edukatif, bukan nasihat keuangan pribadi.</span></div></div></footer></body></html>';
 }
 function cover(a){
@@ -178,14 +178,46 @@ function about(){
  return shell('Tentang Kami','Tentang portal edukasi Lentera Ekonomi.',body,'/tentang/');
 }
 function admin(){
- const body='<section class="page-hero"><div class="wrap"><span class="eyebrow">Untuk pengelola konten</span><h1>Ruang Editor</h1>'+
- '<p>Artikel diatur lewat Pages CMS yang terhubung langsung ke GitHub. Hanya akun yang punya akses repository yang dapat mengubah konten.</p></div></section>'+
- '<section class="wrap" style="padding-bottom:90px"><div class="admin-steps">'+
- '<div class="admin-step"><b>01</b><h3>Masuk dengan GitHub</h3><p>Buka Pages CMS dan masuk menggunakan akun GitHub pengelola.</p></div>'+
- '<div class="admin-step"><b>02</b><h3>Kelola artikel</h3><p>Pilih bravocompanion/lenteraekonomi. Buat artikel, unggah foto, dan atur publikasi.</p></div>'+
- '<div class="admin-step"><b>03</b><h3>Terbitkan</h3><p>Simpan. Perubahan tersimpan di GitHub dan dapat memicu deployment Cloudflare otomatis.</p></div>'+
- '</div><a class="button primary" href="https://app.pagescms.org" target="_blank" rel="noopener noreferrer">Buka panel CMS ↗</a></section>';
- return shell('Ruang Editor','Panel editor artikel Lentera Ekonomi.',body,'/admin/');
+ const body='<div class="cms-root cms-login-wrap" data-cms="login"><section class="cms-login-card" aria-label="Masuk editor">'+
+ '<div class="cms-login-icon"><img src="/assets/brand-emblem.svg" alt=""></div>'+
+ '<p class="cms-eyebrow">LENTERA EKONOMI / ADMIN</p><h1>Masuk ke Ruang Editor</h1>'+
+ '<p>Kelola tulisan, gambar, kategori, dan publikasi artikel Lentera Ekonomi melalui akun editor.</p>'+
+ '<form data-login-form autocomplete="on">'+
+ '<div class="cms-field"><label for="cms-username">Username</label><input id="cms-username" name="username" value="pakde" autocomplete="username" required maxlength="80"></div>'+
+ '<div class="cms-field"><label for="cms-password">Password</label><input id="cms-password" name="password" type="password" autocomplete="current-password" required maxlength="1024" placeholder="Masukkan password editor"></div>'+
+ '<button class="cms-action full" type="submit" data-login-submit>Masuk ke CMS ↗</button></form>'+
+ '<div data-cms-status class="cms-status" role="status" aria-live="polite" hidden></div>'+
+ '<span class="cms-login-note">Area khusus pengelola konten · Dilindungi autentikasi server</span></section></div>';
+ return shell('Login Editor','Masuk ke ruang pengelolaan Lentera Ekonomi.',body,'/admin/');
+}
+function editor(){
+ const categoryOptions=topics.map(t=>'<option value="'+esc(t.name)+'">'+esc(t.name)+'</option>').join('');
+ const body='<div class="cms-root cms-editor-outer" data-cms="editor"><div class="wrap">'+
+ '<header class="cms-editor-top"><div><p class="cms-eyebrow">LENTERA EKONOMI / CONTENT MANAGEMENT</p><h1>Ruang Editor</h1><p>Kelola artikel yang disimpan langsung ke repository GitHub.</p></div><button type="button" class="cms-action secondary" data-logout>Keluar ↗</button></header>'+
+ '<div class="cms-editor-grid"><aside class="cms-sidebar"><h2>Daftar artikel</h2><div class="cms-sidebar-actions"><button type="button" class="cms-action" data-new-article>+ Buat artikel</button>'+
+ '<input class="cms-search" data-article-search type="search" aria-label="Cari artikel" placeholder="Cari judul atau kategori..."></div>'+
+ '<div class="cms-count" data-article-count>Memuat artikel...</div><div class="cms-article-list" data-article-list></div></aside>'+
+ '<section class="cms-editor-panel"><h2 data-editor-heading>Artikel baru</h2>'+
+ '<div data-cms-status class="cms-status" role="status" aria-live="polite" hidden></div>'+
+ '<form data-cms-form><div class="cms-field"><label for="e-title">Judul artikel</label><input id="e-title" name="title" maxlength="160" required placeholder="Tuliskan judul yang informatif"></div>'+
+ '<div class="cms-field"><label for="e-slug">Alamat URL (slug)</label><input id="e-slug" name="slug" maxlength="100" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="judul-artikel"></div>'+
+ '<p class="cms-help" data-slug-help>Alamat URL akan menggunakan slug ini.</p>'+
+ '<div class="cms-field"><label for="e-description">Ringkasan (SEO)</label><textarea id="e-description" name="description" maxlength="360" required rows="3" placeholder="Ringkasan singkat yang muncul di daftar artikel dan mesin pencari"></textarea></div>'+
+ '<div class="cms-form-row"><div class="cms-field"><label for="e-category">Kategori</label><select id="e-category" name="category">'+categoryOptions+'</select></div>'+
+ '<div class="cms-field"><label for="e-date">Tanggal publikasi</label><input id="e-date" name="date" type="date" required></div></div>'+
+ '<div class="cms-field"><label for="e-author">Penulis</label><input id="e-author" name="author" maxlength="100" required></div>'+
+ '<div class="cms-field"><label for="e-cover">Gambar sampul</label><input id="e-cover" name="cover" maxlength="500" placeholder="/media/covers/gambar.webp">'+
+ '<small>Masukkan path media website, atau unggah gambar JPG/PNG/WebP (maks. 1,5 MB).</small></div>'+
+ '<div class="cms-cover-preview" data-cover-preview><span>Pratinjau sampul artikel</span></div>'+
+ '<label class="cms-file-label" for="e-file">Unggah gambar sampul <input id="e-file" type="file" data-cover-upload accept="image/png,image/jpeg,image/webp"></label>'+
+ '<div class="cms-form-checks"><label><input name="published" type="checkbox"> Publikasikan artikel</label>'+
+ '<label><input name="featured" type="checkbox"> Tampilkan sebagai pilihan redaksi</label></div>'+
+ '<div class="cms-field"><label for="e-body">Isi artikel (Markdown)</label><textarea id="e-body" name="body" required spellcheck="true" placeholder="## Subjudul\n\nTuliskan isi artikel di sini..."></textarea>'+
+ '<small>Gunakan ## untuk subjudul, **teks** untuk tebal, - untuk daftar, dan [teks](tautan) untuk link.</small></div>'+
+ '<div class="cms-form-bottom"><button class="cms-action danger" type="button" data-delete hidden>Hapus artikel</button>'+
+ '<div><a class="cms-action secondary" href="/artikel/" target="_blank" rel="noopener noreferrer">Lihat website ↗</a>'+
+ '<button class="cms-action" type="submit" data-save>Simpan ke GitHub ✓</button></div></div></form></section></div></div></div>';
+ return shell('CMS Editor','Kelola artikel Lentera Ekonomi melalui ruang editor pribadi.',body,'/admin/editor/');
 }
 if(fs.existsSync(OUT))fs.rmSync(OUT,{recursive:true,force:true});
 fs.mkdirSync(OUT,{recursive:true});
@@ -197,12 +229,12 @@ const articles=fs.readdirSync('content/articles').filter(x=>x.endsWith('.md')).m
  return a;
 }).filter(a=>a.published===true&&a.title&&a.date&&a.body).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
 write('index.html',home(articles));write('artikel/index.html',listing(articles));
-write('tentang/index.html',about());write('admin/index.html',admin());
-const routes=['/','/artikel/','/tentang/','/admin/'];
+write('tentang/index.html',about());write('admin/index.html',admin());write('admin/editor/index.html',editor());
+const routes=['/','/artikel/','/tentang/'];
 for(const t of topics){const url='/kategori/'+t.slug+'/';write(url.slice(1)+'index.html',category(t,articles));routes.push(url)}
 for(const a of articles){const url='/artikel/'+a.slug+'/';write(url.slice(1)+'index.html',article(a,articles));routes.push(url)}
 write('404.html',shell('Halaman Tidak Ditemukan','Halaman tidak ditemukan.','<section class="page-hero"><div class="wrap"><span class="eyebrow">404</span><h1>Sepertinya kamu tersesat.</h1><p>Kembali ke beranda atau baca artikel lainnya.</p><a class="button primary" href="/">Kembali ke beranda →</a></div></section>','/404/'));
-write('robots.txt','User-agent: *\nAllow: /\nSitemap: '+BASE+'/sitemap.xml\n');
+write('robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: '+BASE+'/sitemap.xml\n');
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+routes.map(u=>'<url><loc>'+BASE+u+'</loc></url>').join('')+'</urlset>');
 write('feed.xml','<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Lentera Ekonomi</title><link>'+BASE+'</link><description>Artikel edukasi ekonomi.</description><language>id-ID</language>'+articles.map(a=>'<item><title>'+esc(a.title)+'</title><link>'+BASE+'/artikel/'+a.slug+'/</link><guid>'+BASE+'/artikel/'+a.slug+'/</guid><pubDate>'+new Date(a.date.slice(0,10)+'T12:00:00Z').toUTCString()+'</pubDate><description>'+esc(a.description)+'</description></item>').join('')+'</channel></rss>');
 console.log('Built '+routes.length+' routes and '+articles.length+' articles.');

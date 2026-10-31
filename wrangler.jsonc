@@ -1,8 +1,15 @@
 {
   "name": "lenteraekonomi",
+  "main": "src/worker.js",
   "compatibility_date": "2026-10-31",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/admin/*",
+      "/admin/editor",
+      "/admin/editor/*"
+    ],
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   }
